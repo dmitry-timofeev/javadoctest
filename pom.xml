@@ -17,7 +17,6 @@
 
   <modules>
     <module>core</module>
-    <module>junit-vintage-runner</module>
   </modules>
 
   <url>http://github.com/jakewins/javadoctest</url>

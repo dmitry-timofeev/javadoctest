@@ -80,6 +80,26 @@ class JavadocTestEngineTest {
   }
 
   @Test
+  void docTestWithDependencies() {
+    Events testEvents = EngineTestKit
+        .engine(JAVADOC_TEST_JUNIT_ENGINE_ID)
+        .selectors(selectFile(FIXTURE_ROOT_PATH.resolve("FixtureDocTestWithDeps.java").toFile()))
+        .execute()
+        .testEvents();
+
+    // Two passing doc-tests in that file
+    testEvents.assertStatistics(stats -> stats.started(2).succeeded(2));
+
+    testEvents.assertThatEvents()
+        .haveExactly(1, event(test("doc-test:0"),
+            finishedSuccessfully()));
+
+    testEvents.assertThatEvents()
+        .haveExactly(1, event(test("doc-test:1"),
+            finishedSuccessfully()));
+  }
+
+  @Test
   void exceptionsInDocTests() {
     Events testEvents = EngineTestKit
         .engine(JAVADOC_TEST_JUNIT_ENGINE_ID)
@@ -126,8 +146,8 @@ class JavadocTestEngineTest {
 
   @Test
   void allDocTestsSelectedByDirectory() {
-    // A single root container + 3 non-empty source containers
-    int expectedContainers = 1 + 3;
+    // A single root container + 4 non-empty source containers
+    int expectedContainers = 1 + 4;
     EngineTestKit
         .engine(JAVADOC_TEST_JUNIT_ENGINE_ID)
         .selectors(selectDirectory(FIXTURE_ROOT_PATH.toFile()))

@@ -107,7 +107,7 @@
 <!--                  <dir>${project.build.testSourceDirectory}</dir>-->
 <!--                </directories>-->
                 <files>
-                  <file>${project.build.testSourceDirectory}/javadoctest/engine/fixture/FixtureDocTestSimple.java</file>
+                  <file>${project.build.testSourceDirectory}/javadoctest/engine/fixture/FixtureDocTestWithDeps.java</file>
                 </files>
               </selectors>
             </configuration>

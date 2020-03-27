@@ -91,9 +91,13 @@
               <goal>launch</goal>
             </goals>
             <configuration>
-              <tweaks>
-                <failIfNoTests>false</failIfNoTests>
-              </tweaks>
+              <!--
+              As the doc tests are compiled from the engine classloader, do not isolate
+              the engines from the main + test dependencies.
+
+              See https://github.com/sormuras/junit-platform-maven-plugin#isolation-level
+              -->
+              <isolation>NONE</isolation>
               <selectors>
 <!--                todo: Obviously, fails because there are some failing tests, but also causes
                           a plugin error! Submit an issue to

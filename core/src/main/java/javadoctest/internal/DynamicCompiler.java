@@ -24,14 +24,17 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.net.URL;
 import java.net.URLClassLoader;
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
 import javax.tools.Diagnostic;
 import javax.tools.DiagnosticCollector;
 import javax.tools.JavaCompiler;
+import javax.tools.JavaFileManager;
 import javax.tools.JavaFileObject;
 import javax.tools.StandardJavaFileManager;
+import javax.tools.StandardLocation;
 
 import static java.util.Arrays.asList;
 import static javax.tools.ToolProvider.getSystemJavaCompiler;
@@ -79,6 +82,23 @@ public class DynamicCompiler
 
             DiagnosticCollector<JavaFileObject> diagnostics = new DiagnosticCollector<>();
             StandardJavaFileManager fm = compiler.getStandardFileManager( diagnostics, null, null );
+
+            System.err.printf("File manager locations:%n");
+            for (StandardLocation location : StandardLocation.values()) {
+                try {
+                    Iterable<? extends File> location1 = fm.getLocation(location);
+                    if (location1 == null) {
+                        continue;
+                    }
+                    List<File> location2 = new ArrayList<>();
+                    location1.forEach(location2::add);
+                    System.err.printf("  - %s: %s%n", location, location2);
+                } catch (IllegalStateException e) {
+                    System.err.printf("  - %s: BAD LOCATION%n", location);
+                } catch (Exception e) {
+                    System.err.printf(" - %s TERRIBLY BAD LOCATION%n", location);
+                }
+            }
 
             compiler.getTask( null, fm, diagnostics, null, null, fm.getJavaFileObjects( sourceFile ) ).call();
 
